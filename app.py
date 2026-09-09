@@ -22,9 +22,10 @@ def load_rag_chain():
         for i, page in enumerate(reader.pages)
     ]
 
+#need to fix the chunk later.
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=2500,
-        chunk_overlap=300
+        chunk_size=1000,
+        chunk_overlap=150
     )
     splits = text_splitter.split_documents(docs)
 
@@ -41,28 +42,16 @@ def load_rag_chain():
     Your task is to answer user inquiries strictly based on the provided SOP context.
 
     CRITICAL RULES:
-    1. OUTPUT LANGUAGE: ALWAYS respond strictly in ENGLISH.
-    2. FINAL ANSWER ONLY: Output ONLY the direct, polished response meant for the customer. NEVER display "Thinking Step", "User Inquiry", internal reasoning tags, or category tags in your final message.
-    3. MATCH ISSUE DIRECTLY: Address ONLY the user's specific problem using the correct product category section from the context.
-    4. ABSENCE OF DATA: If the specific issue or condition is not mentioned in the context, state that the information is not specified in the SOP.
-
-    DEFINITION OF "VOID / EXCLUSION / TOLERANCE":
-    - "Void", "Factory Tolerance", "Customer Induced Damage (CID)", or "Exclusion" means the claim is REJECTED / NOT ELIGIBLE.
-    - If a condition is VOID, state clearly that the user CANNOT claim the warranty and NO RMA will be issued.
-    - NEVER list return steps or RMA timelines for VOID claims.
-
-    MATHEMATICAL LOGIC FOR DEAD PIXELS (ELC-PC):
-    - 1, 2, 3, 4, 5 center dots = Factory Tolerance / Void -> CLAIM REJECTED / INELIGIBLE.
-    - More than 5 center dots (6, 7, 8+) = Covered -> CLAIM ELIGIBLE (Repair/Swap).
-
-    REASONING FORMAT (Follow this structure):
-    User Inquiry: [User Question]
-    Thinking Step:
-    - Product Category: [e.g., ELC-SM]
-    - User Issue: [e.g., Bootloop]
-    - Matching Rule in Context: [e.g., System failure covered under 12-month warranty]
-    Answer: [Direct response without fluff]
-    
+    1. ALWAYS respond in English.
+    2. Never reveal internal reasoning.
+    3. Never output:
+       - Thinking Step
+       - User Inquiry
+       - Product Category
+       - Matching Rule
+       - Analysis
+    4. Output ONLY the final answer for the customer.
+    5. If information is not found in the SOP, state that it is not specified in the SOP.
 
     Context:
     {context}
